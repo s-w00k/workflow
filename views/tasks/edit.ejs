@@ -1,0 +1,338 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Task Management</p>
+        <h1>Edit Task</h1>
+
+        <p>
+            Create a task, assign users, and define
+            its workflow settings.
+        </p>
+    </div>
+
+    <a href="/tasks" class="secondary-link">
+        ← Back to tasks
+    </a>
+</section>
+
+<section class="form-card">
+    <% if (errorMessage) { %>
+        <div class="alert alert-error">
+            <%= errorMessage %>
+        </div>
+    <% } %>
+
+    <form method="POST" action="/tasks/edit/<%= task.task_id %>">
+        <div class="form-section">
+            <div class="form-section-heading">
+                <h2>Task information</h2>
+                <p>Enter the task details and workflow state.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="task_title">
+                        Task title
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="task_title"
+                        name="task_title"
+                        value="<%= task.task_title %>"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="workspace_id">
+                        Workspace
+                        <span class="required">*</span>
+                    </label>
+
+                    <select
+                        id="workspace_id"
+                        name="workspace_id"
+                        required
+                    >
+                        <option value="">
+                            Select a workspace
+                        </option>
+
+                        <% workspaces.forEach(workspace => { %>
+                            <option
+                                value="<%= workspace.workspace_id %>"
+                                <%= Number(task.workspace_id) ===
+                                    workspace.workspace_id
+                                    ? "selected"
+                                    : "" %>
+                            >
+                                <%= workspace.workspace_name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="task_priority">
+                        Priority
+                    </label>
+
+                    <select
+                        id="task_priority"
+                        name="task_priority"
+                    >
+                        <% ["Low", "Normal", "High", "Urgent"]
+                            .forEach(priority => { %>
+                            <option
+                                value="<%= priority %>"
+                                <%= task.task_priority === priority
+                                    ? "selected"
+                                    : "" %>
+                            >
+                                <%= priority %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="task_status">
+                        Status
+                    </label>
+
+                    <select
+                        id="task_status"
+                        name="task_status"
+                    >
+                        <% [
+                            "Draft",
+                            "Open",
+                            "In Progress",
+                            "Completed",
+                            "Cancelled"
+                        ].forEach(status => { %>
+                            <option
+                                value="<%= status %>"
+                                <%= task.task_status === status
+                                    ? "selected"
+                                    : "" %>
+                            >
+                                <%= status %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+    <label for="submission_required">
+        Submission required
+    </label>
+
+    <select
+        id="submission_required"
+        name="submission_required"
+    >
+        <option
+            value="1"
+            <%= Number(
+                task.submission_required
+            ) === 1 ? "selected" : "" %>
+        >
+            Yes
+        </option>
+
+        <option
+            value="0"
+            <%= Number(
+                task.submission_required
+            ) === 0 ? "selected" : "" %>
+        >
+            No
+        </option>
+    </select>
+</div>
+
+<div
+    class="form-group"
+    id="submission_visibility_group"
+>
+    <label for="submission_visibility">
+        Submission visibility
+    </label>
+
+    <select
+        id="submission_visibility"
+        name="submission_visibility"
+    >
+        <option
+            value="Private"
+            <%= task.submission_visibility === "Private"
+                ? "selected"
+                : "" %>
+        >
+            Private — only the submitting employee and management can view submissions
+        </option>
+
+        <option
+            value="Shared"
+            <%= task.submission_visibility === "Shared"
+                ? "selected"
+                : "" %>
+        >
+            Shared — assigned employees and management can view all submissions
+        </option>
+    </select>
+</div>
+
+                <div class="form-group">
+                    <label for="start_date">
+                        Start date
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="start_date"
+                        name="start_date"
+                        value="<%= task.start_date %>"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="due_date">
+                        Due date
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="due_date"
+                        name="due_date"
+                        value="<%= task.due_date %>"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="maximum_score">
+                        Maximum score
+                    </label>
+
+                    <input
+                        type="number"
+                        id="maximum_score"
+                        name="maximum_score"
+                        value="<%= task.maximum_score %>"
+                        min="0"
+                        step="0.01"
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="task_description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="task_description"
+                        name="task_description"
+                        rows="6"
+                    ><%= task.task_description %></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section member-section">
+            <div class="form-section-heading">
+                <h2>Task assignees</h2>
+                <p>Select users responsible for this task.</p>
+            </div>
+
+            <div class="member-selection-grid">
+                <% users.forEach(user => { %>
+                    <label class="member-option">
+                        <input
+                            type="checkbox"
+                            name="assignee_ids"
+                            value="<%= user.user_id %>"
+                            <%= task.assignee_ids.includes(
+                                user.user_id
+                            ) ? "checked" : "" %>
+                        >
+
+                        <span class="member-option-avatar">
+                            <%= user.full_name
+                                .split(" ")
+                                .map(part => part.charAt(0))
+                                .slice(0, 2)
+                                .join("")
+                                .toUpperCase() %>
+                        </span>
+
+                        <span class="member-option-details">
+                            <strong>
+                                <%= user.full_name %>
+                            </strong>
+
+                            <small>
+                                <%= user.email_address %>
+                            </small>
+                        </span>
+                    </label>
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="/tasks" class="cancel-button">
+                Cancel
+            </a>
+
+            <button type="submit" class="primary-button">
+                Save changes
+            </button>
+        </div>
+    </form>
+</section>
+
+<script>
+    const submissionRequired =
+        document.getElementById(
+            "submission_required"
+        );
+
+    const submissionVisibilityGroup =
+        document.getElementById(
+            "submission_visibility_group"
+        );
+
+    const submissionVisibility =
+        document.getElementById(
+            "submission_visibility"
+        );
+
+    function updateSubmissionVisibility() {
+        const submissionsAreRequired =
+            submissionRequired.value === "1";
+
+        submissionVisibilityGroup.hidden =
+            !submissionsAreRequired;
+
+        submissionVisibility.disabled =
+            !submissionsAreRequired;
+
+        if (!submissionsAreRequired) {
+            submissionVisibility.value =
+                "Private";
+        }
+    }
+
+    submissionRequired.addEventListener(
+        "change",
+        updateSubmissionVisibility
+    );
+
+    updateSubmissionVisibility();
+</script>
+
+<%- include("../partials/footer") %>

@@ -1,0 +1,114 @@
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <a href="/dashboard" class="sidebar-brand">
+            <span class="brand-icon">W</span>
+
+            <span class="brand-text">
+                Workflow
+            </span>
+        </a>
+    </div>
+
+    <nav class="sidebar-navigation">
+        <p class="navigation-label">
+            Overview
+        </p>
+
+        <a
+            href="/dashboard"
+            class="navigation-link
+            <%= currentPage === 'dashboard' ? 'active' : '' %>"
+        >
+            <span class="navigation-icon">▦</span>
+            <span>Dashboard</span>
+        </a>
+
+        <p class="navigation-label">
+            Organization
+        </p>
+
+        <a
+            href="/users"
+            class="navigation-link
+            <%= currentPage === 'users' ? 'active' : '' %>"
+        >
+            <span class="navigation-icon">👤</span>
+            <span>Users</span>
+        </a>
+
+        <a
+            href="/roles"
+            class="navigation-link
+            <%= currentPage === 'roles' ? 'active' : '' %>"
+        >
+            <span class="navigation-icon">◉</span>
+            <span>Roles</span>
+        </a>
+
+        <a
+            href="/groups"
+            class="navigation-link
+            <%= currentPage === 'groups' ? 'active' : '' %>"
+        >
+            <span class="navigation-icon">👥</span>
+            <span>Groups</span>
+        </a>
+
+        <p class="navigation-label">
+            Work
+        </p>
+
+        <a
+            href="/workspaces"
+            class="navigation-link
+            <%= currentPage === 'workspaces' ? 'active' : '' %>"
+        >
+            <span class="navigation-icon">▣</span>
+            <span>Workspaces</span>
+        </a>
+
+        <a
+            href="/tasks"
+            class="navigation-link
+            <%= currentPage === 'tasks' ? 'active' : '' %>"
+        >
+            <span class="navigation-icon">✓</span>
+            <span>Tasks</span>
+        </a>
+
+        <a
+            href="/submissions"
+            class="navigation-link
+            <%= currentPage === 'submissions' ? 'active' : '' %>"
+        >
+            <span class="navigation-icon">⇧</span>
+            <span>Submissions</span>
+        </a>
+
+        <p class="navigation-label">
+            System
+        </p>
+
+        <a
+            href="/settings"
+            class="navigation-link
+            <%= currentPage === 'settings' ? 'active' : '' %>"
+        >
+            <span class="navigation-icon">⚙</span>
+            <span>Settings</span>
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                AA
+            </div>
+
+            <div class="user-details">
+                <strong>Alex Administrator</strong>
+                <span>Administrator</span>
+            </div>
+        </div>
+    </div>
+</aside>

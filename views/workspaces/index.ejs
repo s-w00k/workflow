@@ -1,0 +1,126 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Work</p>
+        <h1>Workspaces</h1>
+
+        <p>
+            Create dedicated areas for projects,
+            teams, or ongoing work.
+        </p>
+    </div>
+
+    <a href="/workspaces/add" class="button-link">
+        + Add workspace
+    </a>
+</section>
+
+<% if (successMessage) { %>
+    <div class="alert alert-success">
+        <%= successMessage %>
+    </div>
+<% } %>
+
+<% if (errorMessage) { %>
+    <div class="alert alert-error">
+        <%= errorMessage %>
+    </div>
+<% } %>
+
+<section class="workspace-card-grid">
+    <% if (workspaces.length === 0) { %>
+        <article class="content-card empty-state">
+            <h3>No workspaces found</h3>
+            <p>Create your first workspace.</p>
+
+            <a href="/workspaces/add" class="button-link">
+                Add workspace
+            </a>
+        </article>
+    <% } %>
+
+    <% workspaces.forEach(workspace => { %>
+        <article class="workspace-card">
+            <div class="workspace-card-header">
+                <span
+                    class="
+                        badge
+                        workspace-status-<%=
+                            workspace.workspace_status
+                                .toLowerCase()
+                        %>
+                    "
+                >
+                    <%= workspace.workspace_status %>
+                </span>
+
+                <span class="muted-table-text">
+                    <%= workspace.task_count %>
+                    <%= workspace.task_count === 1
+                        ? "task"
+                        : "tasks" %>
+                </span>
+            </div>
+
+            <h2>
+                <a href="/workspaces/<%= workspace.workspace_id %>">
+                    <%= workspace.workspace_name %>
+                </a>
+            </h2>
+
+            <p class="workspace-description">
+                <%= workspace.workspace_description ||
+                    "No description provided." %>
+            </p>
+
+            <div class="workspace-meta">
+                <span>
+                    <strong><%= workspace.member_count %></strong>
+                    members
+                </span>
+
+                <span>
+                    Created by
+                    <strong>
+                        <%= workspace.creator_name || "Unknown" %>
+                    </strong>
+                </span>
+            </div>
+
+            <div class="workspace-card-actions">
+                <a
+                    href="/workspaces/<%= workspace.workspace_id %>"
+                    class="small-button secondary-button"
+                >
+                    View
+                </a>
+
+                <a
+                    href="/workspaces/edit/<%= workspace.workspace_id %>"
+                    class="small-button secondary-button"
+                >
+                    Edit
+                </a>
+
+                <form
+                    method="POST"
+                    action="/workspaces/<%= workspace.workspace_id %>/delete"
+                    class="inline-form"
+                >
+                    <button
+                        type="submit"
+                        class="small-button danger-button"
+                        data-confirm-workspace-delete
+                        data-workspace-name="<%= workspace.workspace_name %>"
+                        data-task-count="<%= workspace.task_count %>"
+                    >
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </article>
+    <% }) %>
+</section>
+
+<%- include("../partials/footer") %>

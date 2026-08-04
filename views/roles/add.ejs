@@ -1,0 +1,81 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Role Management</p>
+
+        <h1>Add Role</h1>
+
+        <p>
+            Create a new role for users in your organization.
+        </p>
+    </div>
+
+    <a href="/roles" class="secondary-link">
+        ← Back to roles
+    </a>
+</section>
+
+<section class="form-card">
+    <% if (errorMessage) { %>
+        <div class="alert alert-error">
+            <%= errorMessage %>
+        </div>
+    <% } %>
+
+    <form method="POST" action="/roles/add">
+        <div class="form-section">
+            <div class="form-section-heading">
+                <h2>Role information</h2>
+
+                <p>
+                    Give the role a clear name and description.
+                </p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="role_name">
+                        Role name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="role_name"
+                        name="role_name"
+                        value="<%= formData.role_name || '' %>"
+                        placeholder="For example, Project Manager"
+                        maxlength="100"
+                        required
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="role_description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="role_description"
+                        name="role_description"
+                        rows="5"
+                        placeholder="Describe the purpose of this role."
+                    ><%= formData.role_description || "" %></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="/roles" class="cancel-button">
+                Cancel
+            </a>
+
+            <button type="submit" class="primary-button">
+                Create role
+            </button>
+        </div>
+    </form>
+</section>
+
+<%- include("../partials/footer") %>

@@ -1,0 +1,232 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Administration</p>
+
+        <h1>Organization Settings</h1>
+
+        <p>
+            Configure your organization's identity,
+            branding, and availability.
+        </p>
+    </div>
+</section>
+
+<section class="form-card">
+
+    <% if (successMessage) { %>
+        <div class="alert alert-success">
+            <%= successMessage %>
+        </div>
+    <% } %>
+
+    <% if (errorMessage) { %>
+        <div class="alert alert-error">
+            <%= errorMessage %>
+        </div>
+    <% } %>
+
+    <form
+        method="POST"
+        action="/settings"
+    >
+
+        <div class="form-section">
+
+            <div class="form-section-heading">
+                <h2>Organization</h2>
+
+                <p>
+                    General information about your
+                    organization.
+                </p>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="organization_name">
+                        Organization name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="organization_name"
+                        name="organization_name"
+                        required
+                        value="<%= organization.organization_name %>"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="industry">
+                        Industry
+                    </label>
+
+                    <input
+                        type="text"
+                        id="industry"
+                        name="industry"
+                        value="<%= organization.industry || "" %>"
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="logo_path">
+                        Logo path
+                    </label>
+
+                    <input
+                        type="text"
+                        id="logo_path"
+                        name="logo_path"
+                        value="<%= organization.logo_path || "" %>"
+                        placeholder="/images/logo.png"
+                    >
+
+                    <small class="form-help">
+                        Image upload will be added later.
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="form-section">
+
+            <div class="form-section-heading">
+                <h2>Branding</h2>
+
+                <p>
+                    Customize the application's color
+                    theme.
+                </p>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="primary_color">
+                        Primary color
+                    </label>
+
+                    <input
+                        type="color"
+                        id="primary_color"
+                        name="primary_color"
+                        value="<%= organization.primary_color %>"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="secondary_color">
+                        Secondary color
+                    </label>
+
+                    <input
+                        type="color"
+                        id="secondary_color"
+                        name="secondary_color"
+                        value="<%= organization.secondary_color %>"
+                    >
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="form-section">
+
+            <div class="form-section-heading">
+                <h2>Status</h2>
+
+                <p>
+                    Enable or disable the organization.
+                </p>
+            </div>
+
+            <div class="form-group">
+
+                <label for="is_active">
+                    Organization status
+                </label>
+
+                <select
+                    id="is_active"
+                    name="is_active"
+                >
+                    <option
+                        value="1"
+                        <%= organization.is_active === 1
+                            ? "selected"
+                            : "" %>
+                    >
+                        Active
+                    </option>
+
+                    <option
+                        value="0"
+                        <%= organization.is_active === 0
+                            ? "selected"
+                            : "" %>
+                    >
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="form-section">
+
+            <div class="form-section-heading">
+                <h2>System Information</h2>
+            </div>
+
+            <div class="detail-list">
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Organization ID
+                    </span>
+
+                    <span class="detail-value">
+                        <%= organization.organization_id %>
+                    </span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Created
+                    </span>
+
+                    <span class="detail-value">
+                        <%= organization.created_at %>
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Save Settings
+            </button>
+
+        </div>
+
+    </form>
+
+</section>
+
+<%- include("../partials/footer") %>

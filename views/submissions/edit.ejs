@@ -1,0 +1,222 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Submission Management</p>
+        <h1>Edit Submission</h1>
+
+        <p>
+            Update the submitted content, task, user,
+            or submission status.
+        </p>
+    </div>
+
+    <a
+        href="/submissions/<%= submission.submission_id %>"
+        class="secondary-link"
+    >
+        ← Back to submission
+    </a>
+</section>
+
+<section class="form-card">
+    <% if (errorMessage) { %>
+        <div class="alert alert-error">
+            <%= errorMessage %>
+        </div>
+    <% } %>
+
+    <form
+        method="POST"
+        action="/submissions/edit/<%= submission.submission_id %>"
+    >
+        <div class="form-section">
+            <div class="form-section-heading">
+                <h2>Submission information</h2>
+
+                <p>
+                    Update the task, submitting user,
+                    status, or submitted content.
+                </p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="task_id">
+                        Task
+                        <span class="required">*</span>
+                    </label>
+
+                    <select
+                        id="task_id"
+                        name="task_id"
+                        required
+                    >
+                        <option value="">
+                            Select a task
+                        </option>
+
+                        <% tasks.forEach((task) => { %>
+                            <option
+                                value="<%= task.task_id %>"
+                                <%= Number(submission.task_id) ===
+                                    task.task_id
+                                    ? "selected"
+                                    : "" %>
+                            >
+                                <%= task.task_title %>
+                                — <%= task.workspace_name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="submitted_by">
+                        Submitted by
+                        <span class="required">*</span>
+                    </label>
+
+                    <select
+                        id="submitted_by"
+                        name="submitted_by"
+                        required
+                    >
+                        <option value="">
+                            Select a user
+                        </option>
+
+                        <% users.forEach((user) => { %>
+                            <option
+                                value="<%= user.user_id %>"
+                                <%= Number(submission.submitted_by) ===
+                                    user.user_id
+                                    ? "selected"
+                                    : "" %>
+                            >
+                                <%= user.full_name %>
+                                — <%= user.email_address %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="submission_status">
+                        Status
+                    </label>
+
+                    <select
+                        id="submission_status"
+                        name="submission_status"
+                    >
+                        <% [
+                            "Draft",
+                            "Submitted",
+                            "Withdrawn"
+                        ].forEach((status) => { %>
+                            <option
+                                value="<%= status %>"
+                                <%= submission.submission_status === status
+                                    ? "selected"
+                                    : "" %>
+                            >
+                                <%= status %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        Version
+                    </label>
+
+                    <input
+                        type="text"
+                        value="Version <%= submission.version_number %>"
+                        disabled
+                    >
+
+                    <small class="form-help">
+                        Editing does not create a new version.
+                    </small>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="written_response">
+                        Written response
+                    </label>
+
+                    <textarea
+                        id="written_response"
+                        name="written_response"
+                        rows="8"
+                        placeholder="Enter the submission response here..."
+                    ><%= submission.written_response %></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="file_path">
+                        File path
+                    </label>
+
+                    <input
+                        type="text"
+                        id="file_path"
+                        name="file_path"
+                        value="<%= submission.file_path %>"
+                        placeholder="/uploads/example.pdf"
+                    >
+
+                    <small class="form-help">
+                        Temporary text field until file
+                        uploads are added.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="external_link">
+                        External link
+                    </label>
+
+                    <input
+                        type="url"
+                        id="external_link"
+                        name="external_link"
+                        value="<%= submission.external_link %>"
+                        placeholder="https://example.com"
+                    >
+                </div>
+            </div>
+        </div>
+
+        <div class="submission-content-note">
+            <strong>Submission content required</strong>
+
+            <p>
+                At least one of the following must be
+                provided: written response, file path,
+                or external link.
+            </p>
+        </div>
+
+        <div class="form-actions">
+            <a
+                href="/submissions/<%= submission.submission_id %>"
+                class="cancel-button"
+            >
+                Cancel
+            </a>
+
+            <button
+                type="submit"
+                class="primary-button"
+            >
+                Save changes
+            </button>
+        </div>
+    </form>
+</section>
+
+<%- include("../partials/footer") %>

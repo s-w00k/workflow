@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title><%= pageTitle %> | Workflow Platform</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/styles.css"
+    >
+</head>
+
+<body class="login-page">
+    <main class="login-layout">
+        <section class="login-brand-panel">
+            <div class="login-brand-content">
+                <a href="/" class="login-logo">
+                    <span class="login-logo-mark">W</span>
+
+                    <span>
+                        Workflow
+                    </span>
+                </a>
+
+                <div class="login-introduction">
+                    <p class="login-eyebrow">
+                        WORKFLOW PLATFORM
+                    </p>
+
+                    <h1>
+                        Organize work, people,
+                        and submissions.
+                    </h1>
+
+                    <p class="login-description">
+                        Manage teams, workspaces, tasks,
+                        deadlines and employee submissions
+                        from one secure platform.
+                    </p>
+                </div>
+
+                <div class="login-feature-list">
+                    <div class="login-feature">
+                        <span class="login-feature-icon">
+                            ✓
+                        </span>
+
+                        <div>
+                            <strong>
+                                Centralized work
+                            </strong>
+
+                            <p>
+                                Keep tasks and submissions
+                                organized in one place.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="login-feature">
+                        <span class="login-feature-icon">
+                            ✓
+                        </span>
+
+                        <div>
+                            <strong>
+                                Role-based access
+                            </strong>
+
+                            <p>
+                                Give administrators, managers
+                                and members the right permissions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="login-feature">
+                        <span class="login-feature-icon">
+                            ✓
+                        </span>
+
+                        <div>
+                            <strong>
+                                Secure collaboration
+                            </strong>
+
+                            <p>
+                                Control who can view and manage
+                                work across the organization.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="login-brand-footer">
+                Workflow Platform © 2026
+            </p>
+        </section>
+
+        <section class="login-form-panel">
+            <div class="login-card">
+                <div class="login-card-heading">
+                    <p class="login-card-eyebrow">
+                        WELCOME BACK
+                    </p>
+
+                    <h2>
+                        Sign in
+                    </h2>
+
+                    <p>
+                        Enter your account details to continue.
+                    </p>
+                </div>
+
+                <% if (errorMessage) { %>
+                    <div class="alert alert-error">
+                        <%= errorMessage %>
+                    </div>
+                <% } %>
+
+                <form
+                    method="POST"
+                    action="/login"
+                    class="login-form"
+                >
+                    <div class="form-group">
+                        <label for="email_address">
+                            Email address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email_address"
+                            name="email_address"
+                            value="<%= formData.email_address %>"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="login-submit-button"
+                    >
+                        Sign in
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

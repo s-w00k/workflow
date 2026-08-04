@@ -1,0 +1,133 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Workspace Management</p>
+        <h1>Add Workspace</h1>
+
+        <p>
+            Create a workspace and select its members.
+        </p>
+    </div>
+
+    <a href="/workspaces" class="secondary-link">
+        ← Back to workspaces
+    </a>
+</section>
+
+<section class="form-card">
+    <% if (errorMessage) { %>
+        <div class="alert alert-error">
+            <%= errorMessage %>
+        </div>
+    <% } %>
+
+    <form method="POST" action="/workspaces/add">
+        <div class="form-section">
+            <div class="form-section-heading">
+                <h2>Workspace information</h2>
+                <p>Enter its main details and status.</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="workspace_name">
+                        Workspace name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="workspace_name"
+                        name="workspace_name"
+                        value="<%= formData.workspace_name %>"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="workspace_status">
+                        Status
+                    </label>
+
+                    <select
+                        id="workspace_status"
+                        name="workspace_status"
+                    >
+                        <% ["Active", "Completed", "Archived"]
+                            .forEach(status => { %>
+                            <option
+                                value="<%= status %>"
+                                <%= formData.workspace_status === status
+                                    ? "selected"
+                                    : "" %>
+                            >
+                                <%= status %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="workspace_description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="workspace_description"
+                        name="workspace_description"
+                        rows="5"
+                    ><%= formData.workspace_description %></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section member-section">
+            <div class="form-section-heading">
+                <h2>Workspace members</h2>
+                <p>Select users who can access this workspace.</p>
+            </div>
+
+            <div class="member-selection-grid">
+                <% users.forEach(user => { %>
+                    <label class="member-option">
+                        <input
+                            type="checkbox"
+                            name="member_ids"
+                            value="<%= user.user_id %>"
+                            <%= formData.member_ids.includes(
+                                user.user_id
+                            ) ? "checked" : "" %>
+                        >
+
+                        <span class="member-option-avatar">
+                            <%= user.full_name
+                                .split(" ")
+                                .map(part => part.charAt(0))
+                                .slice(0, 2)
+                                .join("")
+                                .toUpperCase() %>
+                        </span>
+
+                        <span class="member-option-details">
+                            <strong><%= user.full_name %></strong>
+                            <small><%= user.email_address %></small>
+                        </span>
+                    </label>
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="/workspaces" class="cancel-button">
+                Cancel
+            </a>
+
+            <button type="submit" class="primary-button">
+                Create workspace
+            </button>
+        </div>
+    </form>
+</section>
+
+<%- include("../partials/footer") %>

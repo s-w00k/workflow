@@ -1,0 +1,178 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">
+            Organization
+        </p>
+
+        <h1>Users</h1>
+
+        <p>
+            Manage the people who can access your organization.
+        </p>
+    </div>
+
+    <a href="/users/add" class="button-link">
+        + Add user
+    </a>
+</section>
+
+<% if (successMessage) { %>
+    <div class="alert alert-success">
+        <span><%= successMessage %></span>
+    </div>
+<% } %>
+
+<% if (errorMessage) { %>
+    <div class="alert alert-error">
+        <span><%= errorMessage %></span>
+    </div>
+<% } %>
+
+<section class="content-card">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">
+                Directory
+            </p>
+
+            <h2>Organization users</h2>
+        </div>
+
+        <span class="record-count">
+            <%= users.length %>
+            <%= users.length === 1 ? "user" : "users" %>
+        </span>
+    </div>
+
+    <% if (users.length === 0) { %>
+        <div class="empty-state">
+            <h3>No users found</h3>
+
+            <p>
+                Add your first user to begin building your team.
+            </p>
+
+            <a href="/users/add" class="button-link">
+                Add user
+            </a>
+        </div>
+    <% } else { %>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Organization</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th class="actions-column">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td>
+                                <div class="table-user">
+                                    <div class="table-avatar">
+                                        <%=
+                                            user.full_name
+                                                .split(" ")
+                                                .map(namePart =>
+                                                    namePart.charAt(0)
+                                                )
+                                                .slice(0, 2)
+                                                .join("")
+                                                .toUpperCase()
+                                        %>
+                                    </div>
+
+                                    <div class="table-user-details">
+                                        <strong>
+                                            <%= user.full_name %>
+                                        </strong>
+
+                                        <span>
+                                            <%= user.email_address %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <%= user.role_name || "No role" %>
+                            </td>
+
+                            <td>
+                                <%= user.organization_name %>
+                            </td>
+
+                            <td>
+                                <% if (user.is_active === 1) { %>
+                                    <span class="badge user-active">
+                                        Active
+                                    </span>
+                                <% } else { %>
+                                    <span class="badge user-inactive">
+                                        Inactive
+                                    </span>
+                                <% } %>
+                            </td>
+
+                            <td>
+                                <%=
+                                    new Date(
+                                        user.created_at
+                                    ).toLocaleDateString()
+                                %>
+                            </td>
+
+                            <td class="actions-column">
+                                <div class="table-actions">
+                                    <a
+                                        href="/users/edit/<%= user.user_id %>"
+                                        class="small-button secondary-button"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="/users/<%= user.user_id %>/toggle-status"
+                                        class="inline-form"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="
+                                                small-button
+                                                <%= user.is_active === 1
+                                                    ? 'danger-button'
+                                                    : 'success-button'
+                                                %>
+                                            "
+                                            data-confirm-status
+                                            data-user-name="<%= user.full_name %>"
+                                            data-current-status="<%= user.is_active %>"
+                                        >
+                                            <%= user.is_active === 1
+                                                ? "Deactivate"
+                                                : "Activate"
+                                            %>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</section>
+
+<%- include("../partials/footer") %>

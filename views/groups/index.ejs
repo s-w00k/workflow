@@ -1,0 +1,148 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Organization</p>
+
+        <h1>Groups</h1>
+
+        <p>
+            Organize users into teams, departments,
+            cohorts, or other collections.
+        </p>
+    </div>
+
+    <a href="/groups/add" class="button-link">
+        + Add group
+    </a>
+</section>
+
+<% if (successMessage) { %>
+    <div class="alert alert-success">
+        <%= successMessage %>
+    </div>
+<% } %>
+
+<% if (errorMessage) { %>
+    <div class="alert alert-error">
+        <%= errorMessage %>
+    </div>
+<% } %>
+
+<section class="content-card">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Directory</p>
+            <h2>Organization groups</h2>
+        </div>
+
+        <span class="record-count">
+            <%= groups.length %>
+            <%= groups.length === 1
+                ? "group"
+                : "groups" %>
+        </span>
+    </div>
+
+    <% if (groups.length === 0) { %>
+        <div class="empty-state">
+            <h3>No groups found</h3>
+
+            <p>
+                Create your first group to organize users.
+            </p>
+
+            <a href="/groups/add" class="button-link">
+                Add group
+            </a>
+        </div>
+    <% } else { %>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Group</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Members</th>
+                        <th>Created by</th>
+                        <th class="actions-column">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% groups.forEach(group => { %>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <%= group.group_name %>
+                                </strong>
+                            </td>
+
+                            <td>
+                                <span class="badge group-type-badge">
+                                    <%= group.group_type ||
+                                        "General" %>
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="muted-table-text">
+                                    <%=
+                                        group.group_description ||
+                                        "No description provided"
+                                    %>
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge role-user-count">
+                                    <%= group.member_count %>
+                                    <%= group.member_count === 1
+                                        ? "member"
+                                        : "members" %>
+                                </span>
+                            </td>
+
+                            <td>
+                                <%= group.creator_name ||
+                                    "Unknown" %>
+                            </td>
+
+                            <td class="actions-column">
+                                <div class="table-actions">
+                                    <a
+                                        href="/groups/edit/<%= group.group_id %>"
+                                        class="small-button secondary-button"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="/groups/<%= group.group_id %>/delete"
+                                        class="inline-form"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="small-button danger-button"
+                                            data-confirm-group-delete
+                                            data-group-name="<%= group.group_name %>"
+                                            data-member-count="<%= group.member_count %>"
+                                        >
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</section>
+
+<%- include("../partials/footer") %>

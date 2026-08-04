@@ -1,0 +1,251 @@
+<%- include("partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">
+            Overview
+        </p>
+
+        <h1>Dashboard</h1>
+
+        <p>
+            View activity across your organization.
+        </p>
+    </div>
+
+    <a href="/tasks/add" class="button-link">
+        + Create task
+    </a>
+</section>
+
+<section class="statistics-grid">
+    <article class="statistic-card">
+        <div class="statistic-card-header">
+            <span class="statistic-label">
+                Organizations
+            </span>
+
+            <span class="statistic-icon">
+                ◫
+            </span>
+        </div>
+
+        <strong class="statistic-number">
+            <%= dashboardData.organizationCount %>
+        </strong>
+
+        <span class="statistic-description">
+            Registered organizations
+        </span>
+    </article>
+
+    <article class="statistic-card">
+        <div class="statistic-card-header">
+            <span class="statistic-label">
+                Active users
+            </span>
+
+            <span class="statistic-icon">
+                👤
+            </span>
+        </div>
+
+        <strong class="statistic-number">
+            <%= dashboardData.userCount %>
+        </strong>
+
+        <span class="statistic-description">
+            Users with active accounts
+        </span>
+    </article>
+
+    <article class="statistic-card">
+        <div class="statistic-card-header">
+            <span class="statistic-label">
+                Workspaces
+            </span>
+
+            <span class="statistic-icon">
+                ▣
+            </span>
+        </div>
+
+        <strong class="statistic-number">
+            <%= dashboardData.workspaceCount %>
+        </strong>
+
+        <span class="statistic-description">
+            Currently active workspaces
+        </span>
+    </article>
+
+    <article class="statistic-card">
+        <div class="statistic-card-header">
+            <span class="statistic-label">
+                Open tasks
+            </span>
+
+            <span class="statistic-icon">
+                ✓
+            </span>
+        </div>
+
+        <strong class="statistic-number">
+            <%= dashboardData.taskCount %>
+        </strong>
+
+        <span class="statistic-description">
+            Tasks requiring attention
+        </span>
+    </article>
+</section>
+
+<section class="dashboard-grid">
+    <article class="content-card recent-tasks-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">
+                    Latest work
+                </p>
+
+                <h2>Recent tasks</h2>
+            </div>
+
+            <a class="text-link" href="/tasks">
+                View all
+            </a>
+        </div>
+
+        <% if (dashboardData.recentTasks.length === 0) { %>
+
+            <div class="empty-state">
+                <p>No tasks have been created yet.</p>
+            </div>
+
+        <% } else { %>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Workspace</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Due date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% dashboardData.recentTasks.forEach(task => { %>
+                            <tr>
+                                <td>
+                                    <a
+                                        href="/tasks/<%= task.task_id %>"
+                                        class="table-title-link"
+                                    >
+                                        <%= task.task_title %>
+                                    </a>
+                                </td>
+
+                                <td>
+                                    <%= task.workspace_name %>
+                                </td>
+
+                                <td>
+                                    <span
+                                        class="
+                                            badge
+                                            priority-<%=
+                                                task.task_priority
+                                                    .toLowerCase()
+                                                    .replace(' ', '-')
+                                            %>
+                                        "
+                                    >
+                                        <%= task.task_priority %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="badge status-badge">
+                                        <%= task.task_status %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <% if (task.due_date) { %>
+                                        <%= task.due_date %>
+                                    <% } else { %>
+                                        No deadline
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+
+        <% } %>
+    </article>
+
+    <aside class="content-card quick-actions-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">
+                    Shortcuts
+                </p>
+
+                <h2>Quick actions</h2>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <a href="/users/add" class="quick-action">
+                <span class="quick-action-icon">
+                    +
+                </span>
+
+                <div>
+                    <strong>Add user</strong>
+                    <span>Create a new account</span>
+                </div>
+            </a>
+
+            <a href="/groups/add" class="quick-action">
+                <span class="quick-action-icon">
+                    +
+                </span>
+
+                <div>
+                    <strong>Create group</strong>
+                    <span>Organize users into teams</span>
+                </div>
+            </a>
+
+            <a href="/workspaces/add" class="quick-action">
+                <span class="quick-action-icon">
+                    +
+                </span>
+
+                <div>
+                    <strong>Create workspace</strong>
+                    <span>Start a new work area</span>
+                </div>
+            </a>
+
+            <a href="/tasks/add" class="quick-action">
+                <span class="quick-action-icon">
+                    +
+                </span>
+
+                <div>
+                    <strong>Create task</strong>
+                    <span>Assign new work</span>
+                </div>
+            </a>
+        </div>
+    </aside>
+</section>
+
+<%- include("partials/footer") %>

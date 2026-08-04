@@ -1,0 +1,291 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Submission Management</p>
+
+        <h1>
+            Submission #<%= submission.submission_id %>
+        </h1>
+
+        <p>
+            View the submitted response and related
+            task information.
+        </p>
+    </div>
+
+    <div class="page-heading-actions">
+        <a
+            href="/submissions/edit/<%= submission.submission_id %>"
+            class="button-link"
+        >
+            Edit submission
+        </a>
+
+        <a
+            href="/submissions"
+            class="secondary-link"
+        >
+            ← Back to submissions
+        </a>
+    </div>
+</section>
+
+<section class="details-grid">
+    <article class="content-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">
+                    Submission
+                </p>
+
+                <h2>
+                    Submitted content
+                </h2>
+            </div>
+
+            <span
+                class="badge submission-status-<%=
+                    submission
+                        .submission_status
+                        .toLowerCase()
+                        .replaceAll(" ", "-")
+                %>"
+            >
+                <%= submission.submission_status %>
+            </span>
+        </div>
+
+        <div class="detail-list">
+            <div class="detail-item">
+                <span class="detail-label">
+                    Written response
+                </span>
+
+                <div class="detail-value">
+                    <% if (submission.written_response) { %>
+                        <p class="preserve-line-breaks">
+                            <%= submission.written_response %>
+                        </p>
+                    <% } else { %>
+                        <span class="muted-text">
+                            No written response provided.
+                        </span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    File
+                </span>
+
+                <div class="detail-value">
+                    <% if (submission.file_path) { %>
+                        <span>
+                            <%= submission.file_path %>
+                        </span>
+                    <% } else { %>
+                        <span class="muted-text">
+                            No file provided.
+                        </span>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    External link
+                </span>
+
+                <div class="detail-value">
+                    <% if (submission.external_link) { %>
+                        <a
+                            href="<%= submission.external_link %>"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="table-title-link"
+                        >
+                            Open external link
+                        </a>
+                    <% } else { %>
+                        <span class="muted-text">
+                            No external link provided.
+                        </span>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <aside class="content-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">
+                    Details
+                </p>
+
+                <h2>
+                    Submission information
+                </h2>
+            </div>
+        </div>
+
+        <div class="detail-list compact-detail-list">
+            <div class="detail-item">
+                <span class="detail-label">
+                    Task
+                </span>
+
+                <span class="detail-value">
+                    <%= submission.task_title %>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Workspace
+                </span>
+
+                <span class="detail-value">
+                    <%= submission.workspace_name %>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Submitted by
+                </span>
+
+                <span class="detail-value">
+                    <%= submission.submitted_by_name %>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Email
+                </span>
+
+                <span class="detail-value">
+                    <%= submission.submitted_by_email %>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Version
+                </span>
+
+                <span class="detail-value">
+                    Version <%= submission.version_number %>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Submitted at
+                </span>
+
+                <span class="detail-value">
+                    <%= submission.submitted_at %>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Due date
+                </span>
+
+                <span class="detail-value">
+                    <%= submission.due_date || "No due date" %>
+                </span>
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">
+                    Maximum score
+                </span>
+
+                <span class="detail-value">
+                    <%= submission.maximum_score !== null
+                        && submission.maximum_score !== undefined
+                        ? submission.maximum_score
+                        : "Not scored" %>
+                </span>
+            </div>
+        </div>
+    </aside>
+</section>
+
+<section class="content-card">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">
+                Related task
+            </p>
+
+            <h2>
+                Task information
+            </h2>
+        </div>
+    </div>
+
+    <div class="detail-list">
+        <div class="detail-item">
+            <span class="detail-label">
+                Task status
+            </span>
+
+            <span class="detail-value">
+                <%= submission.task_status %>
+            </span>
+        </div>
+
+        <div class="detail-item">
+            <span class="detail-label">
+                Description
+            </span>
+
+            <div class="detail-value">
+                <% if (submission.task_description) { %>
+                    <p class="preserve-line-breaks">
+                        <%= submission.task_description %>
+                    </p>
+                <% } else { %>
+                    <span class="muted-text">
+                        No task description provided.
+                    </span>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="danger-zone">
+    <div>
+        <h2>Delete submission</h2>
+
+        <p>
+            This permanently removes this submission
+            record from the system.
+        </p>
+    </div>
+
+    <form
+        method="POST"
+        action="/submissions/<%= submission.submission_id %>/delete"
+    >
+        <button
+            type="submit"
+            class="danger-button"
+            data-confirm-submission-delete
+            data-task-title="<%= submission.task_title %>"
+            data-submitter-name="<%= submission.submitted_by_name %>"
+        >
+            Delete submission
+        </button>
+    </form>
+</section>
+
+<%- include("../partials/footer") %>

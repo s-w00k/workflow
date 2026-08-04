@@ -1,0 +1,152 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Group Management</p>
+
+        <h1>Edit Group</h1>
+
+        <p>
+            Update the group details and membership.
+        </p>
+    </div>
+
+    <a href="/groups" class="secondary-link">
+        ← Back to groups
+    </a>
+</section>
+
+<section class="form-card">
+    <% if (errorMessage) { %>
+        <div class="alert alert-error">
+            <%= errorMessage %>
+        </div>
+    <% } %>
+
+    <form method="POST" action="/groups/edit/<%= group.group_id %>">
+        <div class="form-section">
+            <div class="form-section-heading">
+                <h2>Group information</h2>
+
+                <p>
+                    Groups can represent teams, departments,
+                    classes, cohorts, or committees.
+                </p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="group_name">
+                        Group name
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="group_name"
+                        name="group_name"
+                        value="<%= group.group_name || '' %>"
+                        placeholder="For example, Development Team"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="group_type">
+                        Group type
+                    </label>
+
+                    <input
+                        type="text"
+                        id="group_type"
+                        name="group_type"
+                        value="<%= group.group_type || '' %>"
+                        placeholder="For example, Team"
+                    >
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="group_description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="group_description"
+                        name="group_description"
+                        rows="4"
+                        placeholder="Describe the purpose of this group."
+                    ><%= group.group_description || "" %></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section member-section">
+            <div class="form-section-heading">
+                <h2>Group members</h2>
+
+                <p>
+                    Select all users who should belong to
+                    this group.
+                </p>
+            </div>
+
+            <div class="member-selection-grid">
+                <% users.forEach(user => { %>
+                    <label class="member-option">
+                        <input
+                            type="checkbox"
+                            name="member_ids"
+                            value="<%= user.user_id %>"
+                            <%=
+                                group.member_ids.includes(
+                                    user.user_id
+                                )
+                                    ? "checked"
+                                    : ""
+                            %>
+                        >
+
+                        <span class="member-option-avatar">
+                            <%=
+                                user.full_name
+                                    .split(" ")
+                                    .map((part) => part.charAt(0))
+                                    .slice(0, 2)
+                                    .join("")
+                                    .toUpperCase()
+                            %>
+                        </span>
+
+                        <span class="member-option-details">
+                            <strong>
+                                <%= user.full_name %>
+                            </strong>
+
+                            <small>
+                                <%= user.email_address %>
+                            </small>
+                        </span>
+
+                        <% if (user.is_active !== 1) { %>
+                            <span class="badge user-inactive">
+                                Inactive
+                            </span>
+                        <% } %>
+                    </label>
+                <% }) %>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="/groups" class="cancel-button">
+                Cancel
+            </a>
+
+            <button type="submit" class="primary-button">
+                Save changes
+            </button>
+        </div>
+    </form>
+</section>
+
+<%- include("../partials/footer") %>

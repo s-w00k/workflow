@@ -1,0 +1,138 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Organization</p>
+
+        <h1>Roles</h1>
+
+        <p>
+            Define how users are categorized within your organization.
+        </p>
+    </div>
+
+    <a href="/roles/add" class="button-link">
+        + Add role
+    </a>
+</section>
+
+<% if (successMessage) { %>
+    <div class="alert alert-success">
+        <%= successMessage %>
+    </div>
+<% } %>
+
+<% if (errorMessage) { %>
+    <div class="alert alert-error">
+        <%= errorMessage %>
+    </div>
+<% } %>
+
+<section class="content-card">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Access structure</p>
+            <h2>Organization roles</h2>
+        </div>
+
+        <span class="record-count">
+            <%= roles.length %>
+            <%= roles.length === 1 ? "role" : "roles" %>
+        </span>
+    </div>
+
+    <% if (roles.length === 0) { %>
+        <div class="empty-state">
+            <h3>No roles found</h3>
+
+            <p>
+                Create a role before assigning it to users.
+            </p>
+
+            <a href="/roles/add" class="button-link">
+                Add role
+            </a>
+        </div>
+    <% } else { %>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Description</th>
+                        <th>Assigned users</th>
+                        <th>Created</th>
+                        <th class="actions-column">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% roles.forEach(role => { %>
+                        <tr>
+                            <td>
+                                <strong>
+                                    <%= role.role_name %>
+                                </strong>
+                            </td>
+
+                            <td>
+                                <span class="muted-table-text">
+                                    <%= role.role_description ||
+                                        "No description provided" %>
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="badge role-user-count">
+                                    <%= role.user_count %>
+                                    <%= role.user_count === 1
+                                        ? "user"
+                                        : "users" %>
+                                </span>
+                            </td>
+
+                            <td>
+                                <%=
+                                    new Date(
+                                        role.created_at
+                                    ).toLocaleDateString()
+                                %>
+                            </td>
+
+                            <td class="actions-column">
+                                <div class="table-actions">
+                                    <a
+                                        href="/roles/edit/<%= role.role_id %>"
+                                        class="small-button secondary-button"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="/roles/<%= role.role_id %>/delete"
+                                        class="inline-form"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="small-button danger-button"
+                                            data-confirm-role-delete
+                                            data-role-name="<%= role.role_name %>"
+                                            data-user-count="<%= role.user_count %>"
+                                        >
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</section>
+
+<%- include("../partials/footer") %>

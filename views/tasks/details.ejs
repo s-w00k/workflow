@@ -1,0 +1,137 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">
+            <%= task.workspace_name %>
+        </p>
+
+        <h1><%= task.task_title %></h1>
+
+        <p>
+            <%= task.task_description ||
+                "No description provided." %>
+        </p>
+    </div>
+
+    <a
+        href="/tasks/edit/<%= task.task_id %>"
+        class="button-link"
+    >
+        Edit task
+    </a>
+</section>
+
+<section class="workspace-summary-grid">
+    <article class="statistic-card">
+        <span class="statistic-label">Status</span>
+
+        <strong class="workspace-summary-value">
+            <%= task.task_status %>
+        </strong>
+    </article>
+
+    <article class="statistic-card">
+        <span class="statistic-label">Priority</span>
+
+        <strong class="workspace-summary-value">
+            <%= task.task_priority %>
+        </strong>
+    </article>
+
+    <article class="statistic-card">
+        <span class="statistic-label">Assignees</span>
+
+        <strong class="workspace-summary-value">
+            <%= assignees.length %>
+        </strong>
+    </article>
+
+    <article class="statistic-card">
+        <span class="statistic-label">Due date</span>
+
+        <strong class="workspace-summary-text">
+            <%= task.due_date || "No deadline" %>
+        </strong>
+    </article>
+</section>
+
+<section class="dashboard-grid">
+    <article class="content-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">People</p>
+                <h2>Task assignees</h2>
+            </div>
+        </div>
+
+        <% if (assignees.length === 0) { %>
+            <div class="empty-state">
+                No users assigned.
+            </div>
+        <% } else { %>
+            <% assignees.forEach(assignee => { %>
+                <div class="workspace-member-row">
+                    <div class="table-avatar">
+                        <%= assignee.full_name
+                            .split(" ")
+                            .map(part => part.charAt(0))
+                            .slice(0, 2)
+                            .join("")
+                            .toUpperCase() %>
+                    </div>
+
+                    <div class="table-user-details">
+                        <strong>
+                            <%= assignee.full_name %>
+                        </strong>
+
+                        <span>
+                            <%= assignee.email_address %>
+                        </span>
+                    </div>
+
+                    <span class="badge status-badge">
+                        <%= assignee.assignment_status %>
+                    </span>
+                </div>
+            <% }) %>
+        <% } %>
+    </article>
+
+    <article class="content-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Responses</p>
+                <h2>Submissions</h2>
+            </div>
+        </div>
+
+        <% if (submissions.length === 0) { %>
+            <div class="empty-state">
+                No submissions received.
+            </div>
+        <% } else { %>
+            <% submissions.forEach(submission => { %>
+                <div class="workspace-task-row">
+                    <div>
+                        <strong>
+                            <%= submission.submitted_by_name %>
+                        </strong>
+
+                        <span>
+                            Version
+                            <%= submission.version_number %>
+                        </span>
+                    </div>
+
+                    <span class="badge status-badge">
+                        <%= submission.submission_status %>
+                    </span>
+                </div>
+            <% }) %>
+        <% } %>
+    </article>
+</section>
+
+<%- include("../partials/footer") %>

@@ -1,0 +1,170 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Work</p>
+        <h1>Submissions</h1>
+        <p>
+            Review and manage responses submitted
+            for organization tasks.
+        </p>
+    </div>
+
+    <a
+        href="/submissions/add"
+        class="button-link"
+    >
+        + Add submission
+    </a>
+</section>
+
+<% if (successMessage) { %>
+    <div class="alert alert-success">
+        <%= successMessage %>
+    </div>
+<% } %>
+
+<% if (errorMessage) { %>
+    <div class="alert alert-error">
+        <%= errorMessage %>
+    </div>
+<% } %>
+
+<section class="content-card">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">
+                Submission directory
+            </p>
+
+            <h2>Organization submissions</h2>
+        </div>
+
+        <span class="record-count">
+            <%= submissions.length %>
+            <%= submissions.length === 1
+                ? "submission"
+                : "submissions" %>
+        </span>
+    </div>
+
+    <% if (submissions.length === 0) { %>
+        <div class="empty-state">
+            <h3>No submissions found</h3>
+
+            <p>
+                Create the first submission for
+                an assigned task.
+            </p>
+
+            <a
+                href="/submissions/add"
+                class="button-link"
+            >
+                Add submission
+            </a>
+        </div>
+    <% } else { %>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Workspace</th>
+                        <th>Submitted by</th>
+                        <th>Status</th>
+                        <th>Version</th>
+                        <th>Submitted</th>
+
+                        <th class="actions-column">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% submissions.forEach(
+                        (submission) => {
+                    %>
+                        <tr>
+                            <td>
+                                <a
+                                    href="/submissions/<%= submission.submission_id %>"
+                                    class="table-title-link"
+                                >
+                                    <%= submission.task_title %>
+                                </a>
+                            </td>
+
+                            <td>
+                                <%= submission.workspace_name %>
+                            </td>
+
+                            <td>
+                                <%= submission.submitted_by_name %>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="badge submission-status-<%=
+                                        submission
+                                            .submission_status
+                                            .toLowerCase()
+                                            .replaceAll(" ", "-")
+                                    %>"
+                                >
+                                    <%= submission.submission_status %>
+                                </span>
+                            </td>
+
+                            <td>
+                                Version
+                                <%= submission.version_number %>
+                            </td>
+
+                            <td>
+                                <%= submission.submitted_at %>
+                            </td>
+
+                            <td class="actions-column">
+                                <div class="table-actions">
+                                    <a
+                                        href="/submissions/<%= submission.submission_id %>"
+                                        class="small-button secondary-button"
+                                    >
+                                        View
+                                    </a>
+
+                                    <a
+                                        href="/submissions/edit/<%= submission.submission_id %>"
+                                        class="small-button secondary-button"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="/submissions/<%= submission.submission_id %>/delete"
+                                        class="inline-form"
+                                    >
+                                        <button
+                                            type="submit"
+                                            class="small-button danger-button"
+                                            data-confirm-submission-delete
+                                            data-task-title="<%= submission.task_title %>"
+                                            data-submitter-name="<%= submission.submitted_by_name %>"
+                                        >
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</section>
+
+<%- include("../partials/footer") %>

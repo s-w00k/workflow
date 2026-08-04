@@ -1,0 +1,126 @@
+<%- include("../partials/header") %>
+
+<section class="page-heading">
+    <div>
+        <p class="eyebrow">Workspace</p>
+        <h1><%= workspace.workspace_name %></h1>
+
+        <p>
+            <%= workspace.workspace_description ||
+                "No description provided." %>
+        </p>
+    </div>
+
+    <a
+        href="/workspaces/edit/<%= workspace.workspace_id %>"
+        class="button-link"
+    >
+        Edit workspace
+    </a>
+</section>
+
+<section class="workspace-summary-grid">
+    <article class="statistic-card">
+        <span class="statistic-label">Status</span>
+        <strong class="workspace-summary-value">
+            <%= workspace.workspace_status %>
+        </strong>
+    </article>
+
+    <article class="statistic-card">
+        <span class="statistic-label">Members</span>
+        <strong class="workspace-summary-value">
+            <%= members.length %>
+        </strong>
+    </article>
+
+    <article class="statistic-card">
+        <span class="statistic-label">Tasks</span>
+        <strong class="workspace-summary-value">
+            <%= tasks.length %>
+        </strong>
+    </article>
+
+    <article class="statistic-card">
+        <span class="statistic-label">Created by</span>
+        <strong class="workspace-summary-text">
+            <%= workspace.creator_name || "Unknown" %>
+        </strong>
+    </article>
+</section>
+
+<section class="dashboard-grid">
+    <article class="content-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">People</p>
+                <h2>Workspace members</h2>
+            </div>
+        </div>
+
+        <% if (members.length === 0) { %>
+            <div class="empty-state">
+                No members assigned.
+            </div>
+        <% } else { %>
+            <% members.forEach(member => { %>
+                <div class="workspace-member-row">
+                    <div class="table-avatar">
+                        <%= member.full_name
+                            .split(" ")
+                            .map(part => part.charAt(0))
+                            .slice(0, 2)
+                            .join("")
+                            .toUpperCase() %>
+                    </div>
+
+                    <div class="table-user-details">
+                        <strong><%= member.full_name %></strong>
+                        <span><%= member.email_address %></span>
+                    </div>
+
+                    <span class="badge role-user-count">
+                        <%= member.member_role || "Member" %>
+                    </span>
+                </div>
+            <% }) %>
+        <% } %>
+    </article>
+
+    <article class="content-card">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">Work</p>
+                <h2>Recent tasks</h2>
+            </div>
+
+            <a href="/tasks/add" class="text-link">
+                + Add task
+            </a>
+        </div>
+
+        <% if (tasks.length === 0) { %>
+            <div class="empty-state">
+                No tasks created yet.
+            </div>
+        <% } else { %>
+            <% tasks.forEach(task => { %>
+                <div class="workspace-task-row">
+                    <div>
+                        <strong><%= task.task_title %></strong>
+
+                        <span>
+                            <%= task.due_date || "No deadline" %>
+                        </span>
+                    </div>
+
+                    <span class="badge status-badge">
+                        <%= task.task_status %>
+                    </span>
+                </div>
+            <% }) %>
+        <% } %>
+    </article>
+</section>
+
+<%- include("../partials/footer") %>
